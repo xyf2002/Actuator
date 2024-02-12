@@ -1,28 +1,41 @@
 import RPi.GPIO as GPIO
 import time
 
-# 设置GPIO编号模式
+# Global variable to track the activation state
+notePressed = False
+
+# Setup GPIO
 GPIO.setmode(GPIO.BCM)
 
-# 定义连接到直线电机的四个GPIO引脚
+# Define motor pins
 motorPins = [12, 5, 16, 18]
 
-# 将这四个引脚全部设置为输出模式，并初始化为低电平（关闭状态）
+# Set all pins as output and initialize to low
 for pin in motorPins:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, GPIO.LOW)
 
+def motorRunner(mpins, onTime, offTime):
+    global notePressed
+    
+    if not notePressed:
+        notePressed = True
+        # Activate two motors simultaneously
+        for Mpin in mpins:
+            GPIO.output(Mpin, GPIO.HIGH)
+        time.sleep(onTime)
+        for Mpin in mpins:
+            GPIO.output(Mpin, GPIO.LOW)
+        time.sleep(offTime)
+        notePressed = False
+
 try:
     while True:
-        # 示例：顺序激活每个直线电机
-        for pin in motorPins:
-            GPIO.output(pin, GPIO.HIGH)  # 开启电机
-            time.sleep(1)  # 电机工作1秒
-            GPIO.output(pin, GPIO.LOW)   # 关闭电机
-            time.sleep(1)  # 电机停止1秒之后再切换到下一个
-        
-        # 根据需要添加更多控制逻辑
+        # Check if the note is not pressed and activate two motors
+        if not notePressed:
+            # Example: Activate first two motors together, then next two
+            motorRunner(motorPins[:2], 1, 1)  # Activates pins 12 and 5 together
+            motorRunner(motorPins[2:], 1, 1)  # Activates pins 16 and 18 together
 
 except KeyboardInterrupt:
-    # 清理GPIO设置
-    GPIO.cleanup()
+    GPIO.cleanup()  # Cleanup GPIO setup on Ctrl+C
