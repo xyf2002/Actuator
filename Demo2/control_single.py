@@ -27,9 +27,10 @@ def motorRunner(Mpin, onTime, offTime):
         GPIO.cleanup()  # Clean up the GPIO pins before exiting
 
 # Example usage
-motorPin = 18  # Assign the GPIO pin number that the linear motor is connected to
+motorPin = 12  # Assign the GPIO pin number that the linear motor is connected to
 onTime = 1  # Motor on time in seconds
 offTime = 5  # Motor off time in seconds
+
 
 # Call the function with the motor pin, on time, and off time
 motorRunner(motorPin, onTime, offTime)
