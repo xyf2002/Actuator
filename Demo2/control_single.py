@@ -1,37 +1,36 @@
-import RPi.GPIO as GPIO  # Import the GPIO library for controlling the GPIO pins of the Raspberry Pi
+import RPi.GPIO as GPIO  
 import time  # Import the time library for creating delays
 
+# Global variable to track the pressed state
+notePressed = False
+
 def motorRunner(Mpin, onTime, offTime):
-    """
-    Controls a motor connected to a specified GPIO pin by turning it on for a given duration,
-    then off for a given duration, in a continuous loop.
-
-    Parameters:
-    - Mpin: GPIO pin number to which the motor is connected.
-    - onTime: Duration (in seconds) the motor remains on.
-    - offTime: Duration (in seconds) the motor remains off before the next cycle.
-    """
+    global notePressed  # Declare the global variable to modify it within the function
+    
     GPIO.setmode(GPIO.BCM)  # Set the GPIO pin numbering scheme to BCM
+    GPIO.setup(Mpin, GPIO.OUT)  # Set the motor pin as an output pin
 
-    # Set the motor pin as an output pin
-    GPIO.setup(Mpin, GPIO.OUT)
+    if not notePressed:  # Check if the note is not already pressed
+        notePressed = True 
+        GPIO.output(Mpin, GPIO.HIGH)  # Turn on the motor (activate the actuator)
+        time.sleep(onTime)  # Keep the motor on for the specified duration
+        GPIO.output(Mpin, GPIO.LOW)  # Turn off the motor (deactivate the actuator)
+        time.sleep(offTime)  # Wait for the specified duration before the next cycle
+        resetNotePressed()
 
-    try:
-        while True:  # Create an infinite loop to continuously operate the motor
-            GPIO.output(Mpin, GPIO.HIGH)  # Turn on the motor (activate the actuator)
-            time.sleep(onTime)  # Keep the motor on for the specified duration
-            GPIO.output(Mpin, GPIO.LOW)  # Turn off the motor (deactivate the actuator)
-            time.sleep(offTime)  # Wait for the specified duration before the next cycle
-
-    except KeyboardInterrupt:  # Catch the Ctrl+C signal to exit the loop
-        GPIO.cleanup()  # Clean up the GPIO pins before exiting
+def resetNotePressed():
+    global notePressed
+    notePressed = False  # Reset the notePressed state for the next operation
 
 # Example usage
-motorPin = 12  # Assign the GPIO pin number that the linear motor is connected to
+motorPin = 18  # Motor GPIO pin number
 onTime = 1  # Motor on time in seconds
 offTime = 5  # Motor off time in seconds
 
+try:
+    while notePressed == False:
+        motorRunner(motorPin, onTime, offTime)
 
-# Call the function with the motor pin, on time, and off time
-motorRunner(motorPin, onTime, offTime)
+except KeyboardInterrupt:  # Catch the Ctrl+C signal to exit the loop
+    GPIO.cleanup()  # Clean up the GPIO pins before exiting
 
