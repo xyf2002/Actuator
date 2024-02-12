@@ -25,7 +25,7 @@ def motorRunner(Mpin, onTime, offTime):
 # Example usage
 motorPin = 12  # Motor GPIO pin number
 onTime = 1  # Motor on time in seconds
-offTime = 5  # Motor off time in seconds
+offTime = 1  # Motor off time in seconds
 
 motorRunner(motorPin, onTime, offTime)  # Call the function to start the motor loop
 
