@@ -14,9 +14,11 @@ def motorRunner(Mpin, onTime, offTime):
         while True:  # Keep running the motor in an infinite loop
             if not notePressed:  # If the note is not pressed, activate the motor
                 notePressed = True 
-                GPIO.output(Mpin, GPIO.HIGH)  
+                GPIO.output(Mpin, GPIO.HIGH) 
+                GPIO.output(15, GPIO.HIGH) 
                 time.sleep(onTime)  
-                GPIO.output(Mpin, GPIO.LOW)  
+                GPIO.output(Mpin, GPIO.LOW)
+                GPIO.output(15, GPIO.LOW)
                 time.sleep(offTime)  
                 notePressed = False  # Reset the notePressed state for the next cycle
     except KeyboardInterrupt:  # Allow a keyboard interrupt to break the loop
