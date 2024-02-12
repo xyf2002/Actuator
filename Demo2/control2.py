@@ -1,41 +1,37 @@
 import RPi.GPIO as GPIO
 import time
+import threading  # 导入线程库
 
-# Global variable to track the activation state
-notePressed = False
-
-# Setup GPIO
-GPIO.setmode(GPIO.BCM)
-
+# 同前定义全局变量、GPIO设置和motorPins
 # Define motor pins
 motorPins = [12, 5, 16, 18]
+notePressed = False
 
-# Set all pins as output and initialize to low
-for pin in motorPins:
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, GPIO.LOW)
+def motorRunner(mpin, onTime, offTime):
+    GPIO.output(mpin, GPIO.HIGH)
+    time.sleep(onTime)
+    GPIO.output(mpin, GPIO.LOW)
+    time.sleep(offTime)
 
-def motorRunner(mpins, onTime, offTime):
-    global notePressed
+def runMotorsSimultaneously(mpins, onTime, offTime):
+    threads = []
+    for pin in mpins:
+        thread = threading.Thread(target=motorRunner, args=(pin, onTime, offTime))
+        threads.append(thread)
+        thread.start()
     
-    if not notePressed:
-        notePressed = True
-        # Activate two motors simultaneously
-        for Mpin in mpins:
-            GPIO.output(Mpin, GPIO.HIGH)
-        time.sleep(onTime)
-        for Mpin in mpins:
-            GPIO.output(Mpin, GPIO.LOW)
-        time.sleep(offTime)
-        notePressed = False
+    # 等待所有线程完成
+    for thread in threads:
+        thread.join()
 
 try:
     while True:
-        # Check if the note is not pressed and activate two motors
         if not notePressed:
-            # Example: Activate first two motors together, then next two
-            motorRunner(motorPins[:2], 1, 1)  # Activates pins 12 and 5 together
-            motorRunner(motorPins[2:], 1, 1)  # Activates pins 16 and 18 together
+            notePressed = True
+            # 同时激活所有电机
+            runMotorsSimultaneously(motorPins, 1, 1)
+            notePressed = False
 
 except KeyboardInterrupt:
-    GPIO.cleanup()  # Cleanup GPIO setup on Ctrl+C
+    GPIO.cleanup()
+
