@@ -5,7 +5,7 @@ import time
 GPIO.setmode(GPIO.BCM)
 
 # 定义连接到直线电机的四个GPIO引脚
-motorPins = [18, 23, 24, 25]
+motorPins = [12, 5, 16, 18]
 
 # 将这四个引脚全部设置为输出模式，并初始化为低电平（关闭状态）
 for pin in motorPins:
