@@ -23,7 +23,7 @@ def resetNotePressed():
     notePressed = False  # Reset the notePressed state for the next operation
 
 # Example usage
-motorPin = 18  # Motor GPIO pin number
+motorPin = 12  # Motor GPIO pin number
 onTime = 1  # Motor on time in seconds
 offTime = 5  # Motor off time in seconds
 
