@@ -1,12 +1,12 @@
 import RPi.GPIO as GPIO
 import time
 import threading  # 导入线程库
-import Decoder
+
 
 GPIO.setmode(GPIO.BCM)  # 设置GPIO编号模式为BCM
 
 # 定义连接到直线电机的GPIO引脚
-motorPins = [12, 5, 16, 18]
+motorPins = [12, 5, 16, 18，22, 24，26]
 
 # 全局变量，跟踪按键状态
 notePressed = False
@@ -24,7 +24,9 @@ def motorRunner(infSet):
     GPIO.output(infSet[0], GPIO.LOW)
     time.sleep(infSet[2])
 #Do:12 Re:5 Mi:16 Fa:18 So:22 La:24 Si:26
-Joy=[[16,0.5,0],[16,0.5,0],[18,0.5,0],[22,0.5,0],[22,0.5,0],[18,0.5,0],[16,0.5,0],[5,0.5,0],[12,0.5,0],[12,0.5,0],[5,0.5,0],[16,0.5,0],[16,0.75,0][5,0.25,0][5,1,0]]
+
+Joy=[[16,0.5,0],[16,0.5,0],[18,0.5,0],[22,0.5,0],[22,0.5,0],[18,0.5,0],[16,0.5,0],[5,0.5,0],[12,0.5,0],[12,0.5,0],[5,0.5,0],[16,0.5,0],[16,0.75,0],[5,0.25,0],[5,1,0]]
+
 # 主程序
 if __name__ == "__main__":
     setupGPIO()
