@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO  
+import RPi.GPIO as GPIO
 import time  
 
 # Global variable to track the pressed state
@@ -15,10 +15,9 @@ def motorRunner(Mpin, onTime, offTime):
             if not notePressed:  # If the note is not pressed, activate the motor
                 notePressed = True 
                 GPIO.output(Mpin, GPIO.HIGH) 
-                GPIO.output(15, GPIO.HIGH) 
                 time.sleep(onTime)  
                 GPIO.output(Mpin, GPIO.LOW)
-                GPIO.output(15, GPIO.LOW)
+
                 time.sleep(offTime)  
                 notePressed = False  # Reset the notePressed state for the next cycle
     except KeyboardInterrupt:  # Allow a keyboard interrupt to break the loop
@@ -30,5 +29,4 @@ onTime = 1  # Motor on time in seconds
 offTime = 1  # Motor off time in seconds
 
 motorRunner(motorPin, onTime, offTime)  # Call the function to start the motor loop
-
 
