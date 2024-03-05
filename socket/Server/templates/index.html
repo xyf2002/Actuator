@@ -1,0 +1,25 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Actuator Control</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>8080
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const socket = io.connect('http://<Raspberry_Pi_IP>:');
+
+            document.getElementById('turn-on').addEventListener('click', () => {
+                socket.emit('control_motor', {action: 'on'});
+            });
+
+            document.getElementById('turn-off').addEventListener('click', () => {
+                socket.emit('control_motor', {action: 'off'});
+            });
+        });
+    </script>
+</head>
+<body>
+    <button id="turn-on">Turn On</button>
+    <button id="turn-off">Turn Off</button>
+</body>
+</html>
