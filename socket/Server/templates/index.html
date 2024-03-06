@@ -6,7 +6,7 @@
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>8080
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
-            const socket = io.connect('http://<Raspberry_Pi_IP>:');
+            const socket = io.connect('http://172.24.46.177:');
 
             document.getElementById('turn-on').addEventListener('click', () => {
                 socket.emit('control_motor', {action: 'on'});
