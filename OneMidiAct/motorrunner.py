@@ -2,11 +2,12 @@
 import time
 import threading  # 导入线程库
 import MidiProcessor
-import Actuator_Controller
+from Actuator_Controller import Actuator_Controller
 
 midi='HappyBirthday.mid'
-controller=Actuator_Controller(midi)
-controller.Actuator_play()
+controller=Actuator_Controller(midi,10)
+controller.test()
+
 '''
 GPIO.setmode(GPIO.BCM)  # Set GPIO mode to BCM
 motorPins=[]

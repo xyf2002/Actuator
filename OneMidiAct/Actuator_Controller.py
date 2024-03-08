@@ -1,19 +1,27 @@
 import MidiProcessor
 from collections import defaultdict
 import time
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 
 class Actuator_Controller:
-    def __init__(self,MIDIFile):
+    def __init__(self,MIDIFile,delay=1):
         self.timeline=MidiProcessor.parseMidi(MIDIFile)
+        self.delay=delay
+        self.pause=False
+        
          
         self.noteToPin = {'C':12,
+            'C#':13,
             'D':5,
+            'D#':6,
             'E':16,
             'F':18,
+            'F#':19,
             'G':22,
+            'G#':23,
             'A':24,
+            'A#':25,
             'B':26}
         
         self.control_array=self.get_control_array()
@@ -36,18 +44,42 @@ class Actuator_Controller:
         
         for t,wait,Highpins,Lowpins in self.control_array:
 
-            GPIO.output(Highpins, GPIO.HIGH)
-            #print('GPIO HIGH:', Highpins)
-           
-            GPIO.output(Lowpins, GPIO.LOW)
-            #print('GPIO LOW:',Lowpins)
+            if self.pause==True:
+                while self.pause==True:
+                    pass
+            else:
 
-            time.sleep(wait/1000)
+            #GPIO.output(Highpins, GPIO.HIGH)
+                print('GPIO HIGH:', Highpins)
+           
+            #GPIO.output(Lowpins, GPIO.LOW)
+                print('GPIO LOW:',Lowpins)
+
+                time.sleep((wait/1000)*self.delay)
+
+    def play_pause(self):
+        self.pause=True
+
+    def play_continue(self):
+        self.pause=False
+
+    def test(self):
+        test_array=self.noteToPin.values()
+        for pins in test_array:
+            #GPIO.Output(pins,GPIO.HIGH)
+            print(pins)
+            time.sleep(0.5)
+            #GPIO.Output(pins,GPIO.LOW)
+            print(pins)
+        #GPIO.Output(test_array,GPIO.HIGH)
+        print(test_array)
+        time.sleep(0.3)
+        #GPIO.Output(test_array,GPIO.LOW)
+        
+
 
 
 
         
 
 
-controller=Actuator_Controller('HappyBirthday.mid')
-controller.Actuator_play()
